@@ -1,0 +1,178 @@
+<!--Max Kapranov-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animation with constructor</title>
+    <style>
+        #container {
+            background-color: #29ABE2;
+            height: 300px;
+            width: 300px;
+            margin: auto;
+            position: relative;
+            border: 0.2px solid #000;
+            box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.7);
+        }
+
+        .allboxes {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            position: absolute;
+            opacity: .0;
+            transition: 2.0s opacity;
+            border: 0.2px solid #000;
+            ;
+            color: #fff;
+            font-weight: bold;
+            display: inline-table;
+            text-align: center;
+            box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.7);
+        }
+
+        #box1 {
+            background-color: gray;
+        }
+
+        #box2 {
+            background-color: red;
+        }
+
+        #box3 {
+            background-color: yellowgreen;
+        }
+
+        #box4 {
+            background-color: magenta;
+        }
+
+        #textInside1,
+        #textInside2,
+        #textInside3,
+        #textInside4 {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="allboxes" id="box1">
+            <p id="textInside1">Why?</p>
+        </div>
+        <div class="allboxes" id="box2">
+            <p id="textInside2">When?</p>
+        </div>
+        <div class="allboxes" id="box3">
+            <p id="textInside3">What?</p>
+        </div>
+        <div class="allboxes" id="box4">
+            <p id="textInside4">Who?</p>
+        </div>
+
+    </div>
+
+    <script>
+        window.onload = function() {
+
+            var xLimit = document.getElementById("container").offsetWidth - document.getElementById("box1").offsetWidth - 1;
+            var yLimit = document.getElementById("container").offsetHeight - document.getElementById("box1").offsetHeight - 1;
+
+            function Obj(whatElementWeTake, startXPosition, startYPosition, directionX, directionY, moveLeft, moveRight, moveUp, moveDown, ) {
+                this.getElem = whatElementWeTake;
+                this.x = startXPosition;
+                this.y = startYPosition;
+                this.speedX = directionX; //Probably direction is better for understanding
+                this.speedY = directionY;
+                this.moveLeft = moveLeft; //I guess it's clear
+                this.moveRight = moveRight;
+                this.moveUp = moveUp;
+                this.moveDown = moveDown;
+                this.moveConctructor = function() {
+
+                    this.getElem.style.opacity = 0.8;
+
+                    if (this.moveRight) {
+                        this.x += this.speedX;
+                        this.getElem.style.left = this.x + "px";
+                    }
+                    if (this.moveLeft) {
+                        this.x -= this.speedX;
+                        this.getElem.style.left = this.x + "px";
+                    }
+                    if (this.moveDown) {
+                        this.y += this.speedY;
+                        this.getElem.style.top = this.y + "px";
+                    }
+
+                    if (this.moveUp) {
+                        this.y -= this.speedY;
+                        this.getElem.style.top = this.y + "px";
+                    }
+                    if (this.x >= xLimit) {
+                        this.moveRight = false;
+                        this.moveLeft = true;
+                    }
+                    if (this.x <= 0) {
+                        this.moveLeft = false;
+                        this.moveRight = true;
+                    }
+
+                    if (this.y >= yLimit) {
+                        this.moveDown = false;
+                        this.moveUp = true;
+                    }
+                    if (this.y <= 0) {
+                        this.moveUp = false;
+                        this.moveDown = true;
+                    }
+                }
+
+            }
+
+            var box1 = new Obj();
+            box1.getElem = document.getElementById("box1");
+            box1.x = Math.ceil(Math.random() * xLimit);
+            box1.y = Math.ceil(Math.random() * yLimit);
+            box1.speedX = Math.ceil(Math.random() * 5);
+            box1.speedY = Math.ceil(Math.random() * 5);
+            box1.moveLeft = false;
+            box1.moveRight = true;
+            box1.moveUp = true;
+            box1.moveDown = false;
+
+            var box2 = new Obj();
+            box2.getElem = document.getElementById("box2");
+            box2.x = Math.ceil(Math.random() * xLimit);
+            box2.y = Math.ceil(Math.random() * yLimit);
+            box2.speedX = Math.ceil(Math.random() * 5);
+            box2.speedY = Math.ceil(Math.random() * 5);
+            box2.moveLeft = true;
+            box2.moveRight = false;
+            box2.moveUp = false;
+            box2.moveDown = true;
+
+            function move() {
+                box1.moveConctructor();
+                box2.moveConctructor();
+            }
+            setInterval(move, 20);
+
+            var rotateBox1 = 0;
+            var rotateBox2 = 0;
+
+            function textRotate() {
+                document.getElementById("textInside1").style.transform = "rotate(" + rotateBox1 + "deg)";
+                rotateBox1++;
+                document.getElementById("textInside2").style.transform = "rotate(" + rotateBox2 + "deg)";
+                rotateBox2--;
+            }
+            setInterval(textRotate, 50);
+
+        };
+    </script>
+
+</body></html>
